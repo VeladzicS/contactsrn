@@ -25,6 +25,7 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from "react-native/Libraries/NewAppScreen";
+import AppNavContainer from "./src/navigation";
 
 const App = () => {
   const isDarkMode = useColorScheme() === "dark";
@@ -33,12 +34,7 @@ const App = () => {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
-      <Text>Hellow World</Text>
-    </SafeAreaView>
-  );
+  return <AppNavContainer></AppNavContainer>;
 };
 
 export default App;
