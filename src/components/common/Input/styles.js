@@ -16,6 +16,7 @@ export default StyleSheet.create({
   textInput: {
     flex: 1,
     textAlign: "left",
+    width: "100%",
   },
 
   error: {
