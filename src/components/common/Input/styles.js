@@ -9,6 +9,7 @@ export default StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     marginTop: 5,
+    paddingHorizontal: 5,
   },
   inputContainer: {
     paddingVertical: 5,

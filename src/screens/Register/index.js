@@ -1,13 +1,38 @@
-import React, { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect } from "@react-navigation/native";
+import React, { useContext, useEffect, useState } from "react";
 import RegisterComponent from "../../components/SignUp";
-
+import { LOGIN } from "../../constants/routeNames";
+import register, { clearAuthState } from "../../context/actions/auth/register";
+import { GlobalContext } from "../../context/Provider";
+import axios from "../../helpers/axiosInterceptor";
 const Register = () => {
   const [form, setForm] = useState({});
   const [errors, setErrors] = useState({});
+  const { navigate } = useNavigation();
+  const {
+    authDispatch,
+    authState: { error, loading, data },
+  } = useContext(GlobalContext);
+
+  useEffect(() => {
+    console.log(data);
+    data ? navigate(LOGIN) : "";
+  }, [data]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      return () => {
+        if (data || error) {
+          clearAuthState()(authDispatch);
+        }
+      };
+    }, [data, error])
+  );
 
   const onChange = ({ name, value }) => {
     setForm({ ...form, [name]: value });
-    console.log(form.password);
+
     if (value !== "") {
       if (name === "password" || name === "repeatPassword") {
         if (value.length < 6) {
@@ -76,6 +101,14 @@ const Register = () => {
         return { ...prev, repeatPassword: "This field is required" };
       });
     }
+
+    if (
+      Object.values(form).length === 6 &&
+      Object.values(form).every((item) => item.trim().length > 0) &&
+      Object.values(errors).every((item) => !item)
+    ) {
+      register(form)(authDispatch);
+    }
   };
   return (
     <RegisterComponent
@@ -83,6 +116,8 @@ const Register = () => {
       onChange={onChange}
       errors={errors}
       form={form}
+      error={error}
+      loading={loading}
     />
   );
 };
